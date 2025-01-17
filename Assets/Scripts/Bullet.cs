@@ -10,13 +10,18 @@ public class Bullet : MonoBehaviour
 
     private GmObjectsPool _destroyEffectPool;
     private Vector3 _previousPos;
+    private float _currentDistance;
+
     private float _damage;
     private float _speed;
+    private float _distance;
 
-    public void Init(float damage, float speed)
+    public void Init(float damage, float speed, float distance)
     {
         _damage = damage;
         _speed = speed;
+        _distance = distance;
+        _currentDistance = 0;
 
         if (_destroyEffectPool == null) 
         {
@@ -39,18 +44,24 @@ public class Bullet : MonoBehaviour
                 health.TakeDamage(_damage);
             }
 
-            SpawnDestroyEffect();
+            SpawnDestroyEffect(hit.point);
+            gameObject.SetActive(false);
+        }
 
+        _currentDistance += delta.magnitude;
+        if (_currentDistance >= _distance) 
+        {
+            SpawnDestroyEffect(transform.position);
             gameObject.SetActive(false);
         }
     }
 
-    private void SpawnDestroyEffect() 
+    private void SpawnDestroyEffect(Vector3 position) 
     {
         GameObject effect = _destroyEffectPool.GetPooledObject();
         if (effect != null)
         {
-            effect.transform.position = transform.position;
+            effect.transform.position = position;
             effect.transform.rotation = transform.rotation;
             effect.SetActive(true);
         }

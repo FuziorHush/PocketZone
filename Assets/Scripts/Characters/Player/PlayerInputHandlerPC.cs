@@ -11,6 +11,6 @@ public class PlayerInputHandlerPC : IPlayerInputHandler
 
     public bool GetShooting()
     {
-        throw new System.NotImplementedException();
+        return Input.GetButton("Fire1");
     }
 }

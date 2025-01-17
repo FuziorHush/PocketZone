@@ -22,7 +22,7 @@ public class GmObjectsPool : MonoBehaviour
 
         for (int i = 0; i < _poolSize; i++)
         {
-            GameObject obj = Instantiate(_prefab);
+            GameObject obj = Instantiate(_prefab, transform);
             obj.SetActive(false);
             pool.Add(obj);
         }
@@ -39,7 +39,7 @@ public class GmObjectsPool : MonoBehaviour
         }
 
         //Make new if not enough objects
-        GameObject obj = Instantiate(_prefab);
+        GameObject obj = Instantiate(_prefab, transform);
         obj.SetActive(false);
         pool.Add(obj);
         _poolSize++;

@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneObjects : MonoBehaviour
+public class SceneObjects : MonoSingleton<SceneObjects>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [HideInInspector] public GameObject PlayerLink;
+    public Transform PlayerSpawnPoint;
+    public Transform[] EnemiesSpawnPoints;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Transform CharactersParent;
+    public Transform ItemsParent;
 }

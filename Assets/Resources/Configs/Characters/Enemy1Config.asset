@@ -15,3 +15,6 @@ MonoBehaviour:
   Health: 40
   MoveSpeed: 4
   Damage: 15
+  DamageDelay: 1
+  AgrRadiusIdle: 5
+  AgrRadiusAttack: 7

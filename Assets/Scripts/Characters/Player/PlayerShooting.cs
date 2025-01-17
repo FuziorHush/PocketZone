@@ -9,6 +9,7 @@ public class PlayerShooting : MonoBehaviour
     private float _shootDelay;
     private float _bulletDamage;
     private float _bulletSpeed;
+    private float _bulletDistance;
 
     private float _currentShootDelay;
 
@@ -22,6 +23,7 @@ public class PlayerShooting : MonoBehaviour
         _shootDelay = weaponConfig.Shootdelay;
         _bulletDamage = weaponConfig.BulletDamage;
         _bulletSpeed = weaponConfig.BulletSpeed;
+        _bulletDistance = weaponConfig.Distance;
         _bulletsPool = PoolsController.Instance.GetPool(weaponConfig.BulletsPoolConfig);
     }
 
@@ -49,7 +51,7 @@ public class PlayerShooting : MonoBehaviour
         {
             projectile.transform.position = firePoint.position;
             projectile.transform.rotation = firePoint.rotation;
-            projectile.GetComponent<Bullet>().Init(_bulletDamage, _bulletSpeed);
+            projectile.GetComponent<Bullet>().Init(_bulletDamage, _bulletSpeed, _bulletDistance);
             projectile.SetActive(true);
         }
     }

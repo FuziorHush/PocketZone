@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3076abedad9888347bdf50c55b6cd490, type: 3}
   m_Name: PlayerWeaponConfig
   m_EditorClassIdentifier: 
-  BulletDamage: 15
-  BulletSpeed: 5
-  BulletPoolConfig: {fileID: 11400000, guid: 22db6fda8b86a8e4791958c5d5b053b3, type: 2}
+  Shootdelay: 0.2
+  BulletDamage: 10
+  BulletSpeed: 8
+  Distance: 7
+  BulletsPoolConfig: {fileID: 11400000, guid: f044779cb3588b34fb1eb4afe46425d0, type: 2}

@@ -17,7 +17,7 @@ public class PoolsController : MonoSingleton<PoolsController>
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            if (TryGetComponent(out GmObjectsPool pool)) {
+            if (transform.GetChild(i).TryGetComponent(out GmObjectsPool pool)) {
                 _pools.Add(pool);
             }
         }

@@ -131,6 +131,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _layerMask:
     serializedVersion: 2
-    m_Bits: 72
+    m_Bits: 264
   _raycastRadius: 0.08
   _destroyEffectPoolConfig: {fileID: 11400000, guid: 22db6fda8b86a8e4791958c5d5b053b3, type: 2}

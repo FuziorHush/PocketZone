@@ -12,7 +12,7 @@ public class HpBar : MonoBehaviour
 
     private void Awake()
     {
-        _healthComponent.HpChanged += OnHpChanged;
+        _healthComponent.HealthChanged += OnHpChanged;
         _barGameObject.SetActive(false);
     }
 

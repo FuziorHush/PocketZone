@@ -13,13 +13,9 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private IPlayerInputHandler _inputHandler;
 
-    void Awake()
-    {
-        _rigidbody = GetComponent<Rigidbody2D>();
-    }
-
     public void Init(PlayerConfig config, IPlayerInputHandler inputHandler) 
     {
+        _rigidbody = GetComponent<Rigidbody2D>();
         _inputHandler = inputHandler;
 
         _moveSpeed = config.MoveSpeed;

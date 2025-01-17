@@ -15,7 +15,7 @@ MonoBehaviour:
   Health: 100
   MoveSpeed: 3
   Acceleration: 1
-  MoveVectorDecreace: 0.87
+  MoveVectorDecreace: 0.8
   ItemsPickupRadius: 2
   EnemyDetectionRadius: 5
   WeaponConfig: {fileID: 11400000, guid: 55797cc7af68f5947b9cacf9862c58dc, type: 2}

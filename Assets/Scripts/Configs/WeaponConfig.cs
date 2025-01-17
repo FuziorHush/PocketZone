@@ -8,5 +8,6 @@ public class WeaponConfig : ScriptableObject
     public float Shootdelay;
     public float BulletDamage;
     public float BulletSpeed;
+    public float Distance;
     public PoolConfig BulletsPoolConfig;
 }
