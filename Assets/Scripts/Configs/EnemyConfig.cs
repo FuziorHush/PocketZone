@@ -11,4 +11,6 @@ public class EnemyConfig : ScriptableObject
     public float DamageDelay;
     public float AgrRadiusIdle;
     public float AgrRadiusAttack;
+
+    public ItemsDropConfig ItemsDropConfig;
 }

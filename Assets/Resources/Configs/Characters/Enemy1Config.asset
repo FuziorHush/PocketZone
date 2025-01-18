@@ -18,3 +18,4 @@ MonoBehaviour:
   DamageDelay: 1
   AgrRadiusIdle: 5
   AgrRadiusAttack: 7
+  ItemsDropConfig: {fileID: 11400000, guid: d8d615092ee77c349a8b45a66455617c, type: 2}

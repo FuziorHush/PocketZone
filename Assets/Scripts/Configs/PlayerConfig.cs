@@ -11,6 +11,7 @@ public class PlayerConfig : ScriptableObject
     public float Acceleration;
     public float MoveVectorDecreace;
 
+    public int InventoryCapacity;
     public float ItemsPickupRadius;
     public float EnemyDetectionRadius;
     public WeaponConfig WeaponConfig;

@@ -4,25 +4,31 @@ using UnityEngine;
 
 public class PlayerEnemiesDetection : MonoBehaviour
 {
-    private LayerMask _circleCastLM;
-    private LayerMask _overlapCircleLM;
+    [SerializeField] private LayerMask _circleCastLM;
+    [SerializeField] private LayerMask _overlapCircleLM;
+    [SerializeField] private Transform _shootPoint;
+
     private int _enemyLayer;
 
-    private float _detectionRadius;
-    private float _circleCastRadius;
+    private float _detectionRadius = 3f;
+    private float _circleCastRadius = 0.1f;
 
     public Transform TargetEnemy { get; private set; }
 
     public void Init() {
-        _enemyLayer = LayerMask.NameToLayer("Enemy");
+        _enemyLayer = LayerMask.NameToLayer("Enemies");
     }
 
     private void Update()
     {
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, _detectionRadius, _overlapCircleLM);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(_shootPoint.position, _detectionRadius, _overlapCircleLM);
         if (enemies.Length > 0)
         {
-            TargetEnemy = FindClosestEnemyInLineOfSight(enemies);
+            Collider2D closest = FindClosestEnemyInLineOfSight(enemies);
+            if (closest == null)
+                TargetEnemy = null;
+            else
+                TargetEnemy = closest.transform;
         }
         else 
         {
@@ -30,18 +36,17 @@ public class PlayerEnemiesDetection : MonoBehaviour
         }
     }
 
-    private Transform FindClosestEnemyInLineOfSight(Collider2D[] enemies)
+    private Collider2D FindClosestEnemyInLineOfSight(Collider2D[] enemies)
     {
         Collider2D closestCollider = null;
         float shortestDistance = float.MaxValue;
         for (int i = 0; i < enemies.Length; i++)
         {
-            Vector2 vec = transform.position - enemies[i].transform.position;
-            RaycastHit2D hit = Physics2D.CircleCast(transform.position, _circleCastRadius, vec.normalized, vec.magnitude, _circleCastLM);//obstacles, enemies
-
+            Vector2 vec = enemies[i].transform.position - _shootPoint.position;
+            float distance = vec.magnitude;
+            RaycastHit2D hit = Physics2D.CircleCast(_shootPoint.position, _circleCastRadius, vec.normalized, distance, _circleCastLM);//obstacles, enemies
             if (hit.transform != null && hit.transform.gameObject.layer == _enemyLayer)//if hits enemy
             {
-                float distance = Vector3.Distance(transform.position, enemies[i].transform.position);
                 if (distance < shortestDistance)
                 {
                     closestCollider = enemies[i];
@@ -50,6 +55,6 @@ public class PlayerEnemiesDetection : MonoBehaviour
             }
         }
 
-        return closestCollider.transform;
+        return closestCollider;
     }
 }

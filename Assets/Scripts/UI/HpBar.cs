@@ -21,6 +21,7 @@ public class HpBar : MonoBehaviour
         if (health == maxHealth || health == 0)
             _barGameObject.SetActive(false);
         else {
+            _barGameObject.SetActive(true);
             _barFill.fillAmount = 1 - (1 - (float)health / (float)maxHealth);
         }
     }

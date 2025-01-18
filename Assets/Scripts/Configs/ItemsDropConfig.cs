@@ -5,5 +5,5 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ItemsDropConfig")]
 public class ItemsDropConfig : ScriptableObject
 {
-    public Item[] ItemsToDrop;
+    public InventoryItemConfig[] ItemsToDrop;
 }

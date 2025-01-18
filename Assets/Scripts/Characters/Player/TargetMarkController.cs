@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class TargetMarkController : MonoBehaviour
 {
-    [SerializeField] private GameObject _mark;
+    [SerializeField] private GameObject _markPrefab;
+    private GameObject _mark;
     private Transform _markTransform;
     private SpriteRenderer _markSpriteRenderer;
 
@@ -14,8 +16,12 @@ public class TargetMarkController : MonoBehaviour
 
     public void Init() 
     {
+        _playerDetection = GetComponent<PlayerEnemiesDetection>();
+
+        _mark = Instantiate(_markPrefab);
+        _markSpriteRenderer = _mark.transform.GetChild(0).GetComponent<SpriteRenderer>();
+        _markSpriteRenderer.color = Color.clear;
         _markTransform = _mark.transform;
-        _markSpriteRenderer = _mark.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -24,14 +30,15 @@ public class TargetMarkController : MonoBehaviour
         {
             if (_mark.activeInHierarchy)
             {
+                _currentTarget = null;
                 _mark.SetActive(false);
             }
         }
         else if (_currentTarget != _playerDetection.TargetEnemy)
         {
-            StopCoroutine("MarkSetAnimatiion");
-            StartCoroutine("MarkSetAnimatiion");
-            //install dotween
+            _markTransform.position = _playerDetection.TargetEnemy.position;
+            _currentTarget = _playerDetection.TargetEnemy;
+            PlaySetMarkAnimation();
         }
         else 
         {
@@ -39,18 +46,12 @@ public class TargetMarkController : MonoBehaviour
         }
     }
 
-    private IEnumerator MarkSetAnimatiion() {
-        _markSpriteRenderer.color = Color.clear;
-        _markSpriteRenderer.transform.localScale = new Vector3(2, 2, 2);
-        float colorAlpha = 0;
-        float scale = 2;
-        for (int i = 0; i < 20; i++)
-        {
-            yield return null;
-            colorAlpha += 0.05f;
-            scale -= 0.05f;
-            //_markSpriteRenderer. = new Color()
-        }
-        //install dotween lol
+    private void PlaySetMarkAnimation() 
+    {
+        _mark.SetActive(true);
+        _markSpriteRenderer.color = new Color(1f, 1f, 1f, 0f);
+        _markTransform.localScale = new Vector3(2, 2, 2);
+        _markSpriteRenderer.DOFade(1f, 0.5f);
+        _markTransform.DOScale(1f, 0.5f);
     }
 }

@@ -24,9 +24,9 @@ public class Health : MonoBehaviour
             _damageTakenThisFrame = 0;
             if (_health < 0)
                 _health = 0;
-        }
 
-        HealthChanged?.Invoke(_health, _maxHealth);
+            HealthChanged?.Invoke(_health, _maxHealth);
+        }
     }
 
     public void TakeDamage(float damage)

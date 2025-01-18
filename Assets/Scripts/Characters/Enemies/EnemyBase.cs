@@ -48,6 +48,7 @@ public class EnemyBase : MonoBehaviour
     private void OnHealthChanged(float health, float maxHealth) 
     {
         if (health <= 0) {
+            GameEvents.EnemyDied?.Invoke(gameObject);
             Destroy(gameObject);
         }
     }

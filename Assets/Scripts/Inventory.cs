@@ -1,20 +1,11 @@
-using Items;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Inventory //from my other game
+public class Inventory
 {
     public List<InventoryItem> Items { get; private set; } = new List<InventoryItem>();
     public int MaxCapacity { get; private set; }
-
-    public UnityAction<List<InventoryItem>> InventoryUpdated;
-    public UnityAction<Item> ItemAdded;
-    public UnityAction<int> InventoryCapacityChanged;
-
-    public Inventory()
-    {
-    }
 
     public Inventory(int maxCapacity)
     {
@@ -23,7 +14,6 @@ public class Inventory //from my other game
 
     public void SetMaxCapacity(int maxCapacity) {
         MaxCapacity = maxCapacity;
-        InventoryCapacityChanged?.Invoke(MaxCapacity);
 
         if (maxCapacity < Items.Count)
         {
@@ -40,8 +30,6 @@ public class Inventory //from my other game
             if (itemToStack != null)
             {
                 itemToStack.Amount += amount;
-                ItemAdded?.Invoke(item);
-                InventoryUpdated?.Invoke(Items);
             }
             else
             {
@@ -81,7 +69,6 @@ public class Inventory //from my other game
             {
                 Items.RemoveAt(inventoryID);
             }
-            InventoryUpdated?.Invoke(Items);
         }
     }
 
@@ -93,7 +80,6 @@ public class Inventory //from my other game
         if (Items[inventoryID] != null)
         {
             Items.RemoveAt(inventoryID);
-            InventoryUpdated?.Invoke(Items);
         }
     }
 
@@ -101,7 +87,5 @@ public class Inventory //from my other game
     {
         InventoryItem newItem = new InventoryItem(item, amount);
         Items.Add(newItem);
-        ItemAdded?.Invoke(item);
-        InventoryUpdated?.Invoke(Items);
     }
 }

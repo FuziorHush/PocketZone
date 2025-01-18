@@ -14,7 +14,7 @@ TagManager:
   - Player
   - Ground
   - Enemies
-  - 
+  - Items
   - 
   - 
   - 
@@ -43,4 +43,10 @@ TagManager:
     locked: 0
   - name: Characters
     uniqueID: 2639459277
+    locked: 0
+  - name: Effects
+    uniqueID: 351348845
+    locked: 0
+  - name: WorldCanvases
+    uniqueID: 3571114285
     locked: 0
