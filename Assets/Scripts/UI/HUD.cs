@@ -15,6 +15,10 @@ public class HUD : MonoSingleton<HUD>
     [SerializeField] private Text _ammoText;
     [SerializeField] private InventoryButton[] _inventoryButtons;
 
+    [SerializeField] private Button _saveButton;
+    [SerializeField] private Button _loadButton;
+    [SerializeField] private Button _restartButton;
+
     private PlayerInventory _playerInventory;
 
     private int _slotIdToDeleteItem = -1;
@@ -36,6 +40,10 @@ public class HUD : MonoSingleton<HUD>
 
         _deleteItemButton.onClick.AddListener(delegate { InventoryDeleteButtonPressed(_slotIdToDeleteItem); });
         _inventoryButton.onClick.AddListener(SwitchInventory);
+
+        _saveButton.onClick.AddListener(SaveGame);
+        _loadButton.onClick.AddListener(LoadGame);
+        _restartButton.onClick.AddListener(RestartGame);
 
         GameEvents.PlayerAmmoAmountChanged += OnPlayerAmmoAmountChange;
         GameEvents.PlayerInventoryUpdated += UpdateInventory;
@@ -77,6 +85,22 @@ public class HUD : MonoSingleton<HUD>
         _deleteItemRectTransform.gameObject.SetActive(false);
         SendDeleteItem?.Invoke(id);
         UpdateInventory(_playerInventory.Inventory);
+    }
+
+    public void SaveGame()
+    {
+        GameSave.GameSaveController.Instance.SaveGame();
+    }
+
+    public void LoadGame()
+    {
+        GameFlowController.Instance.Restart();
+    }
+
+    public void RestartGame()
+    {
+        Bootstrap.LoadSaveOnStart = false;
+        GameFlowController.Instance.Restart();
     }
 
     private void SwitchInventory() 

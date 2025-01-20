@@ -66,13 +66,13 @@ namespace GameSave
     [System.Serializable]
     public class CharacterSaveData
     {
-        public CharacterSaveData(Vector3 position, float health)
+        public CharacterSaveData(PositionSave position, float health)
         {
             Position = position;
             Health = health;
         }
 
-        public Vector3 Position;
+        public PositionSave Position;
         public float Health;
     }
 
@@ -87,5 +87,20 @@ namespace GameSave
 
         public int ID;
         public int Amount;
+    }
+
+    [System.Serializable]
+    public class PositionSave
+    {
+        public PositionSave(Vector3 position)
+        {
+            X = position.x;
+            Y = position.y;
+            Z = position.z;
+        }
+
+        public float X;
+        public float Y;
+        public float Z;
     }
 }

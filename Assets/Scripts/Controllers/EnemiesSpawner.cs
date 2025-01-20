@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GameSave;
+using Enemies;
 
 public class EnemiesSpawner : MonoSingleton<EnemiesSpawner>
 {
@@ -12,6 +13,8 @@ public class EnemiesSpawner : MonoSingleton<EnemiesSpawner>
     protected override void Awake()
     {
         base.Awake();
+
+        GameEvents.EnemyDied += OnEnemyDie;
     }
 
     public void SpawnEnemies() 
@@ -32,7 +35,7 @@ public class EnemiesSpawner : MonoSingleton<EnemiesSpawner>
         for (int i = 0; i < _spawnedEnemies.Count; i++)
         {
             GameObject enemy = _spawnedEnemies[i];
-            CharacterSaveData characterData = new CharacterSaveData(enemy.transform.position, enemy.GetComponent<Health>().CurrentHealth);
+            CharacterSaveData characterData = new CharacterSaveData(new PositionSave(enemy.transform.position), enemy.GetComponent<Health>().CurrentHealth);
             enemyDataArray[i] = new EnemySaveData(characterData, enemy.GetComponent<EnemyBase>().Config.ID);
         }
         return enemyDataArray;
@@ -42,7 +45,8 @@ public class EnemiesSpawner : MonoSingleton<EnemiesSpawner>
     {
         for (int i = 0; i < enemiesData.Length; i++)
         {
-            GameObject enemy = CreateEnemy(enemiesData[i].CharacterData.Position, enemiesData[i].ID);
+            Vector3 position = new Vector3(enemiesData[i].CharacterData.Position.X, enemiesData[i].CharacterData.Position.Y, enemiesData[i].CharacterData.Position.Z);
+            GameObject enemy = CreateEnemy(position, enemiesData[i].ID);
             enemy.GetComponent<Health>().SetHealth(enemiesData[i].CharacterData.Health);
         }
     }
@@ -54,5 +58,17 @@ public class EnemiesSpawner : MonoSingleton<EnemiesSpawner>
         enemy.GetComponent<EnemyBase>().Init();
         _spawnedEnemies.Add(enemy);
         return enemy;
+    }
+
+    private void OnEnemyDie(GameObject enemy)
+    {
+        _spawnedEnemies.Remove(enemy);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        GameEvents.EnemyDied -= OnEnemyDie;
     }
 }

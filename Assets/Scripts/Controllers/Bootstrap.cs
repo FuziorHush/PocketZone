@@ -3,6 +3,7 @@ using GameSave;
 
 public class Bootstrap : MonoBehaviour
 {
+    [SerializeField] private GameFlowController _gameFlow;
     [SerializeField] private ItemsDatabase _itemsDatabase;
     [SerializeField] private PoolsController _poolsController;
     [SerializeField] private PlayerSpawner _playerSpawner;
@@ -11,13 +12,21 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private GameSaveController _gameSaveController;
     [SerializeField] private HUD _hud;
 
+    public static bool LoadSaveOnStart;
+
+    static Bootstrap()
+    {
+        LoadSaveOnStart = true;
+    }
+
     private void Start()
     {
+        _gameFlow.Init();
         _itemsDatabase.Init();
         _poolsController.Init();
         _itemsDropSystem.Init();
 
-        if (!SaveLoadManager.CheckSaveFileExists())
+        if (!SaveLoadManager.CheckSaveFileExists() || !LoadSaveOnStart)
         {
             _playerSpawner.SpawnPlayer();
             _hud.Init();
@@ -31,10 +40,6 @@ public class Bootstrap : MonoBehaviour
             _enemiesSpawner.LoadEnemies(gameSave.EnemyData);
         }
 
-        GameEvents.PlayerDied += Restart;
-    }
-
-    private void Restart() {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        LoadSaveOnStart = true;
     }
 }

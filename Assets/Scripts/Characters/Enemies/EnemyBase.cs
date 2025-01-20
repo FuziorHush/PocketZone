@@ -2,73 +2,77 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
-public class EnemyBase : MonoBehaviour
+namespace Enemies
 {
-    [SerializeField] private EnemyConfig _config;
-    public EnemyConfig Config => _config;
-
-    private Health _healthConponent;
-    public NavMeshAgent NavMeshAgent { get; private set; }
-
-    private Dictionary<EnemyState, IEnemyState> _states = new Dictionary<EnemyState, IEnemyState>();
-    public EnemyState State { get; private set; }
-    private IEnemyState _currentState;
-
-    public Transform PlayerTransform { get; private set; }
-
-    public void Init() 
+    public class EnemyBase : MonoBehaviour
     {
-        _healthConponent = GetComponent<Health>();
-        NavMeshAgent = GetComponent<NavMeshAgent>();
+        [SerializeField] private EnemyConfig _config;
+        public EnemyConfig Config => _config;
 
-        EnemyStateIdle enemyStateIdle = GetComponent<EnemyStateIdle>();
-        enemyStateIdle.Init(this, _config);
-        _states.Add(EnemyState.Idle, enemyStateIdle);
+        private Health _healthConponent;
+        public NavMeshAgent NavMeshAgent { get; private set; }
 
-        EnemyStateAttack enemyStateAttack = GetComponent<EnemyStateAttack>();
-        enemyStateAttack.Init(this, _config);
-        _states.Add(EnemyState.Attack, enemyStateAttack);
+        private Dictionary<EnemyState, IEnemyState> _states = new Dictionary<EnemyState, IEnemyState>();
+        public EnemyState State { get; private set; }
+        private IEnemyState _currentState;
 
-        _healthConponent.Init(_config.Health);
-        _healthConponent.HealthChanged += OnHealthChanged;
+        public Transform PlayerTransform { get; private set; }
 
-        NavMeshAgent.speed = _config.MoveSpeed;
-        NavMeshAgent.stoppingDistance = _config.DamageRadius;
-
-        PlayerTransform = SceneObjects.Instance.PlayerLink.transform;
-
-        _currentState = _states[0];
-        _currentState.OnActivate();
-    }
-
-    private void Update()
-    {
-        _currentState.OnUpdate();
-    }
-
-    private void OnHealthChanged(float health, float maxHealth) 
-    {
-        if (health <= 0) {
-            GameEvents.EnemyDied?.Invoke(gameObject);
-            Destroy(gameObject);
-        }
-    }
-
-    public bool SetState(EnemyState state)
-    {
-        if (_states.ContainsKey(state))
+        public void Init()
         {
-            _currentState.OnDeactivate();
+            _healthConponent = GetComponent<Health>();
+            NavMeshAgent = GetComponent<NavMeshAgent>();
 
-            _currentState = _states[state];
+            EnemyStateIdle enemyStateIdle = GetComponent<EnemyStateIdle>();
+            enemyStateIdle.Init(this, _config);
+            _states.Add(EnemyState.Idle, enemyStateIdle);
+
+            EnemyStateAttack enemyStateAttack = GetComponent<EnemyStateAttack>();
+            enemyStateAttack.Init(this, _config);
+            _states.Add(EnemyState.Attack, enemyStateAttack);
+
+            _healthConponent.Init(_config.Health);
+            _healthConponent.HealthChanged += OnHealthChanged;
+
+            NavMeshAgent.speed = _config.MoveSpeed;
+            NavMeshAgent.stoppingDistance = _config.DamageRadius;
+
+            PlayerTransform = SceneObjects.Instance.PlayerLink.transform;
+
+            _currentState = _states[0];
             _currentState.OnActivate();
-
-            State = state;
-            return true;
         }
-        else
+
+        private void Update()
         {
-            return false;
+            _currentState.OnUpdate();
+        }
+
+        private void OnHealthChanged(float health, float maxHealth)
+        {
+            if (health <= 0)
+            {
+                GameEvents.EnemyDied?.Invoke(gameObject);
+                Destroy(gameObject);
+            }
+        }
+
+        public bool SetState(EnemyState state)
+        {
+            if (_states.ContainsKey(state))
+            {
+                _currentState.OnDeactivate();
+
+                _currentState = _states[state];
+                _currentState.OnActivate();
+
+                State = state;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

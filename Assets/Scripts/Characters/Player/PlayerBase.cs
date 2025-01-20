@@ -33,7 +33,7 @@ public class PlayerBase : MonoBehaviour
         _playerMovement.Init(_playerConfig, _inputHandler);
         _playerShooting.Init(_weaponConfig, _inputHandler);
         _playerInventory.Init(_playerConfig);
-        _playerEnemiesDetection.Init();
+        _playerEnemiesDetection.Init(_playerConfig);
         _targetMark.Init();
     }
 

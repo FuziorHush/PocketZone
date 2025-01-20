@@ -1,7 +1,9 @@
-
-public enum EnemyState
+namespace Enemies
 {
-    Idle,
-    Attack,
+    public enum EnemyState
+    {
+        Idle,
+        Attack,
+    }
 }
 

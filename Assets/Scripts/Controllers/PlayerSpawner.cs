@@ -22,7 +22,7 @@ public class PlayerSpawner : MonoSingleton<PlayerSpawner>
     public PlayerSaveData GetPlayerData() 
     {
         GameObject player = SceneObjects.Instance.PlayerLink;
-        CharacterSaveData characterData = new CharacterSaveData(player.transform.position, player.GetComponent<Health>().CurrentHealth);
+        CharacterSaveData characterData = new CharacterSaveData(new PositionSave(player.transform.position), player.GetComponent<Health>().CurrentHealth);
 
         Inventory inventory = player.GetComponent<PlayerInventory>().Inventory;
         ItemSaveData[] itemSaveDatas = new ItemSaveData[inventory.Items.Count];
@@ -31,14 +31,13 @@ public class PlayerSpawner : MonoSingleton<PlayerSpawner>
              itemSaveDatas[i] = new ItemSaveData(inventory.Items[i].Item.ID, inventory.Items[i].Amount);
         }
 
-        PlayerSaveData playerSaveData = new PlayerSaveData(characterData, player.GetComponent<PlayerShooting>().Ammo, itemSaveDatas);
-
-        return playerSaveData;
+        return new PlayerSaveData(characterData, player.GetComponent<PlayerShooting>().Ammo, itemSaveDatas);
     }
 
     public void LoadPlayer(PlayerSaveData playerData)
     {
-        GameObject player = CreatePlayer(playerData.CharacterData.Position);
+        Vector3 position = new Vector3(playerData.CharacterData.Position.X, playerData.CharacterData.Position.Y, playerData.CharacterData.Position.Z);
+        GameObject player = CreatePlayer(position);
         player.GetComponent<Health>().SetHealth(playerData.CharacterData.Health);
         player.GetComponent<PlayerShooting>().SetAmmo(playerData.PlayerAmmo);
 

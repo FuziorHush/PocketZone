@@ -10,13 +10,15 @@ public class PlayerEnemiesDetection : MonoBehaviour
 
     private int _enemyLayer;
 
-    private float _detectionRadius = 3f;
+    private float _detectionRadius;
     private float _circleCastRadius = 0.1f;
 
     public Transform TargetEnemy { get; private set; }
 
-    public void Init() {
+    public void Init(PlayerConfig config) 
+    {
         _enemyLayer = LayerMask.NameToLayer("Enemies");
+        _detectionRadius = config.EnemyDetectionRadius;
     }
 
     private void Update()
@@ -25,6 +27,7 @@ public class PlayerEnemiesDetection : MonoBehaviour
         if (enemies.Length > 0)
         {
             Collider2D closest = FindClosestEnemyInLineOfSight(enemies);
+
             if (closest == null)
                 TargetEnemy = null;
             else
