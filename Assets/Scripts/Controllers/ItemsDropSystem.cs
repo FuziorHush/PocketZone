@@ -26,4 +26,11 @@ public class ItemsDropSystem : MonoSingleton<ItemsDropSystem>
         GameObject droppedItem = Instantiate(_groundItemPrefab, deathPos, Quaternion.identity, _itemsParent);
         droppedItem.GetComponent<GroundItem>().Init(itemConfig);
     }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        GameEvents.EnemyDied -= OnEnemyDeath;
+    }
 }

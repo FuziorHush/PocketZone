@@ -3,54 +3,57 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public static class SaveLoadManager
+namespace GameSave
 {
-    private static string GameSavePath;
-
-    static SaveLoadManager()
+    public static class SaveLoadManager
     {
-        GameSavePath = Application.persistentDataPath + "/gamesave.save";
-    }
+        private static string GameSavePath;
 
-    public static bool CheckSaveFileExists()
-    {
-       return File.Exists(GameSavePath);
-    }
-
-    public static bool SaveGame(GameSave gameSave)
-    {
-        BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream fileStream = new FileStream(GameSavePath, FileMode.Create);
-
-        try
+        static SaveLoadManager()
         {
-            binaryFormatter.Serialize(fileStream, gameSave);
-            fileStream.Close();
-            return true;
+            GameSavePath = Application.persistentDataPath + "/gamesave.save";
         }
-        catch (System.Exception)
-        {
-            fileStream.Close();
-            return false;
-        }
-    }
 
-    public static GameSave LoadGame()
-    {
-        BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream fileStream = new FileStream(GameSavePath, FileMode.Open);
-
-        GameSave gameSave;
-        try
+        public static bool CheckSaveFileExists()
         {
-            gameSave = (GameSave)binaryFormatter.Deserialize(fileStream);
-            fileStream.Close();
-            return gameSave;
+            return File.Exists(GameSavePath);
         }
-        catch (System.Exception)
+
+        public static bool SaveGame(GameSaveData gameSave)
         {
-            fileStream.Close();
-            return null;
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            FileStream fileStream = new FileStream(GameSavePath, FileMode.Create);
+
+            try
+            {
+                binaryFormatter.Serialize(fileStream, gameSave);
+                fileStream.Close();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                fileStream.Close();
+                return false;
+            }
+        }
+
+        public static GameSaveData LoadGame()
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            FileStream fileStream = new FileStream(GameSavePath, FileMode.Open);
+
+            GameSaveData gameSave;
+            try
+            {
+                gameSave = (GameSaveData)binaryFormatter.Deserialize(fileStream);
+                fileStream.Close();
+                return gameSave;
+            }
+            catch (System.Exception)
+            {
+                fileStream.Close();
+                return null;
+            }
         }
     }
 }

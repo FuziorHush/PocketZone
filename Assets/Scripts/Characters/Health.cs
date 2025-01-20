@@ -8,6 +8,8 @@ public class Health : MonoBehaviour
     private float _maxHealth;
 
     private float _health;
+    public float CurrentHealth => _health;
+
     private float _damageTakenThisFrame;
 
     public UnityAction<float, float> HealthChanged;
@@ -32,5 +34,11 @@ public class Health : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _damageTakenThisFrame += damage;
+    }
+
+    public void SetHealth(float health) 
+    {
+        _health = health;
+        HealthChanged?.Invoke(_health, _maxHealth);
     }
 }

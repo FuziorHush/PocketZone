@@ -54,20 +54,20 @@ public class Inventory
         }
     }
 
-    public void DeleteOneItem(int inventoryID)
+    public void DeleteOneItem(int itemID)
     {
         if (MaxCapacity == 0)
             return;
 
-        if (Items[inventoryID] != null)
+        if (Items.Count > itemID && Items[itemID] != null)
         {
-            if (Items[inventoryID].Amount > 1)
+            if (Items[itemID].Amount > 1)
             {
-                Items[inventoryID].Amount--;
+                Items[itemID].Amount--;
             }
-            else if (Items[inventoryID].Amount == 1)
+            else if (Items[itemID].Amount == 1)
             {
-                Items.RemoveAt(inventoryID);
+                Items.RemoveAt(itemID);
             }
         }
     }

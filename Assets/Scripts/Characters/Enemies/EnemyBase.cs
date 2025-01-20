@@ -33,6 +33,7 @@ public class EnemyBase : MonoBehaviour
         _healthConponent.HealthChanged += OnHealthChanged;
 
         NavMeshAgent.speed = _config.MoveSpeed;
+        NavMeshAgent.stoppingDistance = _config.DamageRadius;
 
         PlayerTransform = SceneObjects.Instance.PlayerLink.transform;
 
@@ -57,6 +58,8 @@ public class EnemyBase : MonoBehaviour
     {
         if (_states.ContainsKey(state))
         {
+            _currentState.OnDeactivate();
+
             _currentState = _states[state];
             _currentState.OnActivate();
 

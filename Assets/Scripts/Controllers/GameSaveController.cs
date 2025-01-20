@@ -2,54 +2,90 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameSaveController : MonoBehaviour
+namespace GameSave
 {
-    public static GameSave GameSave;
-
-    private void Awake()
+    public class GameSaveController : MonoSingleton<GameSaveController>
     {
-
-    }
-
-    public void Init()
-    {
-        if (!SaveLoadManager.CheckSaveFileExists())
+        protected override void Awake()
         {
-            CreateGameSave();
-            SaveGame();
+            base.Awake();
         }
-        else
+
+        public void SaveGame()
         {
-            LoadSave();
+            GameSaveData gameSave = new GameSaveData(PlayerSpawner.Instance.GetPlayerData(), EnemiesSpawner.Instance.GetEnemiesData());
+            SaveLoadManager.SaveGame(gameSave);
+        }
+
+        public GameSaveData LoadSave()
+        {
+            return SaveLoadManager.LoadGame();
         }
     }
 
-    public void CreateGameSave()
+    [System.Serializable]
+    public class GameSaveData
     {
-        GameSave = new GameSave();
+        public GameSaveData(PlayerSaveData playerSaveData, EnemySaveData[] enemyData) {
+            PlayerData = playerSaveData;
+            EnemyData = enemyData;
+        }
 
+        public PlayerSaveData PlayerData;
+        public EnemySaveData[] EnemyData;
     }
 
-    public void SaveGame()
+    [System.Serializable]
+    public class PlayerSaveData
     {
-        SaveLoadManager.SaveGame(GameSave);
+        public PlayerSaveData(CharacterSaveData characterData, int playerAmmo, ItemSaveData[] playerItems)
+        {
+            CharacterData = characterData;
+            PlayerAmmo = playerAmmo;
+            PlayerItems = playerItems;
+        }
+
+        public CharacterSaveData CharacterData;
+        public int PlayerAmmo;
+        public ItemSaveData[] PlayerItems;
     }
 
-    public void LoadSave()
+    [System.Serializable]
+    public class EnemySaveData
     {
-        GameSave = SaveLoadManager.LoadGame();
+        public EnemySaveData(CharacterSaveData characterData, int id)
+        {
+            CharacterData = characterData;
+            ID = id;
+        }
+
+        public CharacterSaveData CharacterData;
+        public int ID;
     }
 
-    public void ResetGameSave() 
+    [System.Serializable]
+    public class CharacterSaveData
     {
-        CreateGameSave();
-        SaveGame();
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        public CharacterSaveData(Vector3 position, float health)
+        {
+            Position = position;
+            Health = health;
+        }
+
+        public Vector3 Position;
+        public float Health;
     }
-}
 
-[System.Serializable]
-public class GameSave
-{
+    [System.Serializable]
+    public class ItemSaveData
+    {
+        public ItemSaveData(int id, int amount)
+        {
+            ID = id;
+            Amount = amount;
+        }
 
+        public int ID;
+        public int Amount;
+    }
 }

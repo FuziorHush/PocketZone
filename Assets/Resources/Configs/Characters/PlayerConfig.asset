@@ -16,7 +16,7 @@ MonoBehaviour:
   MoveSpeed: 2
   Acceleration: 1
   MoveVectorDecreace: 0.8
-  InventoryCapacity: 0
+  InventoryCapacity: 4
   ItemsPickupRadius: 0.5
-  EnemyDetectionRadius: 8
+  EnemyDetectionRadius: 11
   WeaponConfig: {fileID: 11400000, guid: 55797cc7af68f5947b9cacf9862c58dc, type: 2}

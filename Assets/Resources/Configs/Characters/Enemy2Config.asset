@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba95dbe668f4164d8f22ee26a63c84b, type: 3}
   m_Name: Enemy2Config
   m_EditorClassIdentifier: 
+  ID: 1
   Health: 70
-  MoveSpeed: 2.5
+  MoveSpeed: 1.2
   Damage: 25
   DamageDelay: 1.25
+  DamageRadius: 0.8
   AgrRadiusIdle: 5
   AgrRadiusAttack: 7
   ItemsDropConfig: {fileID: 11400000, guid: d8d615092ee77c349a8b45a66455617c, type: 2}

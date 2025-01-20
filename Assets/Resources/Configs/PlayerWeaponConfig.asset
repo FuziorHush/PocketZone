@@ -16,4 +16,5 @@ MonoBehaviour:
   BulletDamage: 10
   BulletSpeed: 8
   Distance: 7
+  Ammo: 30
   BulletsPoolConfig: {fileID: 11400000, guid: f044779cb3588b34fb1eb4afe46425d0, type: 2}

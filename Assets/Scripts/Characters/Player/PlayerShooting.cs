@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerShooting : MonoBehaviour
 {
-    public Transform firePoint;
+    [SerializeField]private Transform _shootPoint;
 
     private float _shootDelay;
     private float _bulletDamage;
@@ -12,6 +12,8 @@ public class PlayerShooting : MonoBehaviour
     private float _bulletDistance;
 
     private int _ammo;
+    public int Ammo => _ammo;
+
     private float _currentShootDelay;
 
     private IPlayerInputHandler _inputHandler;
@@ -27,6 +29,7 @@ public class PlayerShooting : MonoBehaviour
         _bulletDamage = weaponConfig.BulletDamage;
         _bulletSpeed = weaponConfig.BulletSpeed;
         _bulletDistance = weaponConfig.Distance;
+        _ammo = weaponConfig.Ammo;
         _bulletsPool = PoolsController.Instance.GetPool(weaponConfig.BulletsPoolConfig);
     }
 
@@ -36,9 +39,16 @@ public class PlayerShooting : MonoBehaviour
         GameEvents.PlayerAmmoAmountChanged?.Invoke(_ammo);
     }
 
+    public void SetAmmo(int amount)
+    {
+        _ammo = amount;
+        GameEvents.PlayerAmmoAmountChanged?.Invoke(_ammo);
+    }
+
     void Update()
     {
-        if (_playerDetection.TargetEnemy != null) {
+        if (_playerDetection.TargetEnemy != null)
+        {
             RotateShootPointToTarget();
         }
 
@@ -48,7 +58,7 @@ public class PlayerShooting : MonoBehaviour
 
         if (_inputHandler.GetShooting())
         {
-            if (_currentShootDelay > 0 && _ammo <= 0)
+            if (_currentShootDelay > 0 || _ammo <= 0)
                 return;
 
             ShootProjectile();
@@ -60,9 +70,9 @@ public class PlayerShooting : MonoBehaviour
 
     private void RotateShootPointToTarget()
     {
-        Vector3 lookVector = _playerDetection.TargetEnemy.position - firePoint.position;
+        Vector3 lookVector = _playerDetection.TargetEnemy.position - _shootPoint.position;
         float rotationZ = Mathf.Atan2(lookVector.y, lookVector.x) * Mathf.Rad2Deg;
-        firePoint.rotation = Quaternion.Euler(0.0f, 0.0f, rotationZ - 90f);
+        _shootPoint.rotation = Quaternion.Euler(0.0f, 0.0f, rotationZ - 90f);
     }
 
     private void ShootProjectile()
@@ -71,8 +81,8 @@ public class PlayerShooting : MonoBehaviour
 
         if (projectile != null)
         {
-            projectile.transform.position = firePoint.position;
-            projectile.transform.rotation = firePoint.rotation;
+            projectile.transform.position = _shootPoint.position;
+            projectile.transform.rotation = _shootPoint.rotation;
             projectile.GetComponent<Bullet>().Init(_bulletDamage, _bulletSpeed, _bulletDistance);
             projectile.SetActive(true);
         }

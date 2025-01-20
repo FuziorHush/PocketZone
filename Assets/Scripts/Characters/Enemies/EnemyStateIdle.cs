@@ -6,7 +6,7 @@ public class EnemyStateIdle : MonoBehaviour, IEnemyState
 {
     private EnemyBase _enemyBase;
 
-    [SerializeField] private float _agrRadius;
+     private float _agrRadius;
 
     public void Init(EnemyBase enemyBase, EnemyConfig config) 
     {

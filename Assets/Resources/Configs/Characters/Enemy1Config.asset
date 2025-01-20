@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Enemy1Config
   m_EditorClassIdentifier: 
   Health: 40
-  MoveSpeed: 4
+  MoveSpeed: 2
   Damage: 15
   DamageDelay: 1
+  DamageRadius: 0.8
   AgrRadiusIdle: 5
   AgrRadiusAttack: 7
   ItemsDropConfig: {fileID: 11400000, guid: d8d615092ee77c349a8b45a66455617c, type: 2}
