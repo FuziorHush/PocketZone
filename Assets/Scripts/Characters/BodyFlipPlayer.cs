@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodyFlipRigidbody : MonoBehaviour
+public class BodyFlipPlayer : MonoBehaviour
 {
     [SerializeField] private Transform _bodyTransform;
     private bool _flipped;

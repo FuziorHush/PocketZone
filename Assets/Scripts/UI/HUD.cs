@@ -33,10 +33,10 @@ public class HUD : MonoSingleton<HUD>
 
     public void Init()
     {
-        GameObject player = SceneObjects.Instance.PlayerLink;
+        GameObject player = SceneObjects.Instance.PlayerGameObject;
 
-        _playerInventory = player.GetComponent<PlayerInventory>();
-        _ammoText.text = player.GetComponent<PlayerShooting>().Ammo.ToString();
+        _playerInventory = player.GetComponent<PlayerBase>().PlayerInventory;
+        _ammoText.text = player.GetComponent<PlayerBase>().PlayerShooting.Ammo.ToString();
 
         _deleteItemButton.onClick.AddListener(delegate { InventoryDeleteButtonPressed(_slotIdToDeleteItem); });
         _inventoryButton.onClick.AddListener(SwitchInventory);
@@ -99,8 +99,7 @@ public class HUD : MonoSingleton<HUD>
 
     public void RestartGame()
     {
-        Bootstrap.LoadSaveOnStart = false;
-        GameFlowController.Instance.Restart();
+        GameFlowController.Instance.RestartWithoutLoadig();
     }
 
     private void SwitchInventory() 

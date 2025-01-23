@@ -5,10 +5,11 @@ using UnityEngine.AI;
 
 namespace Enemies
 {
-    public class EnemyStateAttack : MonoBehaviour, IEnemyState
+    public class EnemyStateAttack : IEnemyState
     {
         private EnemyBase _enemyBase;
         private NavMeshAgent _navMeshAgent;
+        private Transform _transform;
 
         private float _agrRadius;
         private float _damageRadius;
@@ -20,7 +21,8 @@ namespace Enemies
         public void Init(EnemyBase enemyBase, EnemyConfig config)
         {
             _enemyBase = enemyBase;
-            _navMeshAgent = GetComponent<NavMeshAgent>();
+            _navMeshAgent = enemyBase.GetComponent<NavMeshAgent>();
+            _transform = enemyBase.transform;
             _agrRadius = config.AgrRadiusIdle;
             _damage = config.Damage;
             _damageDelay = config.DamageDelay;
@@ -39,12 +41,12 @@ namespace Enemies
                 _currentDamageDelay -= Time.deltaTime;
             }
 
-            if (Vector3.Distance(transform.position, _enemyBase.PlayerTransform.position) < _damageRadius && _currentDamageDelay <= 0)
+            if (Vector3.Distance(_transform.position, _enemyBase.PlayerTransform.position) < _damageRadius && _currentDamageDelay <= 0)
             {
                 _enemyBase.PlayerTransform.GetComponent<Health>().TakeDamage(_damage);
                 _currentDamageDelay += _damageDelay;
             }
-            else if (Vector3.Distance(transform.position, _enemyBase.PlayerTransform.position) > _agrRadius)
+            else if (Vector3.Distance(_transform.position, _enemyBase.PlayerTransform.position) > _agrRadius)
             {
                 _enemyBase.SetState(EnemyState.Idle);
             }

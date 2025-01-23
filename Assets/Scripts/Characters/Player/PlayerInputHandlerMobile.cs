@@ -8,7 +8,7 @@ public class PlayerInputHandlerMobile : IPlayerInputHandler
     private HUD _hud;
 
     public void Init(GameObject player) {
-        _playerInventory = player.GetComponent<PlayerInventory>();
+        _playerInventory = player.GetComponent<PlayerBase>().PlayerInventory;
         _hud = HUD.Instance;
         _hud.SendDeleteItem += DeleteItem;
     }

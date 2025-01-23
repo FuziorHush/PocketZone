@@ -6,35 +6,70 @@ public class PlayerBase : MonoBehaviour
 {
     [SerializeField] private PlayerConfig _playerConfig;
     [SerializeField] private WeaponConfig _weaponConfig;
+    [SerializeField] private GameObject _playerBody;
+    [SerializeField] private Transform _shootPoint;
+    [SerializeField] private LayerMask _itemsLM;
+    [SerializeField] private LayerMask _enemyDetectionCircleCastLM;
+    [SerializeField] private LayerMask _enemyDetectionOverlapCircleLM;
+    [SerializeField] private GameObject _targetMarkPrefab;
 
-    private PlayerMovement _playerMovement;
-    private PlayerShooting _playerShooting;
-    private PlayerInventory _playerInventory;
-    private PlayerEnemiesDetection _playerEnemiesDetection;
-    private TargetMarkController _targetMark;
-    private Health _healthConponent;
-    private IPlayerInputHandler _inputHandler;
+    public PlayerMovement PlayerMovement { get; private set; }
+    public PlayerShooting PlayerShooting { get; private set; }
+    public PlayerInventory PlayerInventory { get; private set; }
+    public PlayerEnemiesDetection PlayerEnemiesDetection { get; private set; }
+    public TargetMarkController TargetMark { get; private set; }
+    public Health HealthConponent { get; private set; }
+    public IPlayerInputHandler InputHandler { get; private set; }
+
+    private List<IPlayerContextUpdate> _updateContexts = new List<IPlayerContextUpdate>();
+    private List<IPlayerContextFixedUpdate> _fixedUpdateContexts = new List<IPlayerContextFixedUpdate>();
 
     public void Init()
     {
-        _playerMovement = GetComponent<PlayerMovement>();
-        _playerShooting = GetComponent<PlayerShooting>();
-        _playerInventory = GetComponent<PlayerInventory>();
-        _playerEnemiesDetection = GetComponent<PlayerEnemiesDetection>();
-        _targetMark = GetComponent<TargetMarkController>();
-        _healthConponent = GetComponent<Health>();
+        PlayerMovement = new PlayerMovement();
+        _updateContexts.Add(PlayerMovement);
+        _fixedUpdateContexts.Add(PlayerMovement);
 
-        _inputHandler = new PlayerInputHandlerMobile();
-        _inputHandler.Init(gameObject);
+        PlayerShooting = new PlayerShooting();
+        _updateContexts.Add(PlayerShooting);
 
-        _healthConponent.Init(_playerConfig.Health);
-        _healthConponent.HealthChanged += OnHealthChanged;
+        PlayerInventory = new PlayerInventory();
+        _updateContexts.Add(PlayerInventory);
 
-        _playerMovement.Init(_playerConfig, _inputHandler);
-        _playerShooting.Init(_weaponConfig, _inputHandler);
-        _playerInventory.Init(_playerConfig);
-        _playerEnemiesDetection.Init(_playerConfig);
-        _targetMark.Init();
+        PlayerEnemiesDetection = new PlayerEnemiesDetection();
+        _updateContexts.Add(PlayerEnemiesDetection);
+
+        TargetMark = new TargetMarkController();
+        _updateContexts.Add(TargetMark);
+
+        InputHandler = new PlayerInputHandlerMobile();
+        InputHandler.Init(gameObject);
+
+        HealthConponent = GetComponent<Health>();
+        HealthConponent.Init(_playerConfig.Health);
+        HealthConponent.HealthChanged += OnHealthChanged;
+
+        PlayerMovement.Init(_playerConfig, InputHandler, GetComponent<Rigidbody2D>(), _playerBody.GetComponent<Animator>());
+        PlayerShooting.Init(_weaponConfig, InputHandler, PlayerEnemiesDetection, _shootPoint);
+        PlayerInventory.Init(_playerConfig, transform, PlayerShooting, _itemsLM);
+        PlayerEnemiesDetection.Init(_playerConfig, _enemyDetectionCircleCastLM, _enemyDetectionOverlapCircleLM, _shootPoint);
+        TargetMark.Init(PlayerEnemiesDetection, _targetMarkPrefab);
+    }
+
+    private void Update()
+    {
+        for (int i = 0; i < _updateContexts.Count; i++)
+        {
+            _updateContexts[i].OnUpdate();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        for (int i = 0; i < _fixedUpdateContexts.Count; i++)
+        {
+            _fixedUpdateContexts[i].OnFixedUpdate();
+        }
     }
 
     private void OnHealthChanged(float health, float maxHealth)

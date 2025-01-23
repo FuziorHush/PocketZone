@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShooting : MonoBehaviour
+public class PlayerShooting : IPlayerContextUpdate
 {
-    [SerializeField]private Transform _shootPoint;
-
     private float _shootDelay;
     private float _bulletDamage;
     private float _bulletSpeed;
@@ -19,11 +17,13 @@ public class PlayerShooting : MonoBehaviour
     private IPlayerInputHandler _inputHandler;
     private PlayerEnemiesDetection _playerDetection;
     private GmObjectsPool _bulletsPool;
+    private Transform _shootPoint;
 
-    public void Init(WeaponConfig weaponConfig, IPlayerInputHandler inputHandler)
+    public void Init(WeaponConfig weaponConfig, IPlayerInputHandler inputHandler, PlayerEnemiesDetection playerDetection, Transform shootPoint)
     {
         _inputHandler = inputHandler;
-        _playerDetection = GetComponent<PlayerEnemiesDetection>();
+        _playerDetection = playerDetection;
+        _shootPoint = shootPoint;
 
         _shootDelay = weaponConfig.Shootdelay;
         _bulletDamage = weaponConfig.BulletDamage;
@@ -45,14 +45,15 @@ public class PlayerShooting : MonoBehaviour
         GameEvents.PlayerAmmoAmountChanged?.Invoke(_ammo);
     }
 
-    void Update()
+    public void OnUpdate() 
     {
         if (_playerDetection.TargetEnemy != null)
         {
             RotateShootPointToTarget();
         }
 
-        if (_currentShootDelay > 0) {
+        if (_currentShootDelay > 0)
+        {
             _currentShootDelay -= Time.deltaTime;
         }
 

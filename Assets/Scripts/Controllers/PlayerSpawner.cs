@@ -21,17 +21,17 @@ public class PlayerSpawner : MonoSingleton<PlayerSpawner>
 
     public PlayerSaveData GetPlayerData() 
     {
-        GameObject player = SceneObjects.Instance.PlayerLink;
+        GameObject player = SceneObjects.Instance.PlayerGameObject;
         CharacterSaveData characterData = new CharacterSaveData(new PositionSave(player.transform.position), player.GetComponent<Health>().CurrentHealth);
 
-        Inventory inventory = player.GetComponent<PlayerInventory>().Inventory;
+        Inventory inventory = player.GetComponent<PlayerBase>().PlayerInventory.Inventory;
         ItemSaveData[] itemSaveDatas = new ItemSaveData[inventory.Items.Count];
         for (int i = 0; i < inventory.Items.Count; i++)
         {
              itemSaveDatas[i] = new ItemSaveData(inventory.Items[i].Item.ID, inventory.Items[i].Amount);
         }
 
-        return new PlayerSaveData(characterData, player.GetComponent<PlayerShooting>().Ammo, itemSaveDatas);
+        return new PlayerSaveData(characterData, player.GetComponent<PlayerBase>().PlayerShooting.Ammo, itemSaveDatas);
     }
 
     public void LoadPlayer(PlayerSaveData playerData)
@@ -39,9 +39,9 @@ public class PlayerSpawner : MonoSingleton<PlayerSpawner>
         Vector3 position = new Vector3(playerData.CharacterData.Position.X, playerData.CharacterData.Position.Y, playerData.CharacterData.Position.Z);
         GameObject player = CreatePlayer(position);
         player.GetComponent<Health>().SetHealth(playerData.CharacterData.Health);
-        player.GetComponent<PlayerShooting>().SetAmmo(playerData.PlayerAmmo);
+        player.GetComponent<PlayerBase>().PlayerShooting.SetAmmo(playerData.PlayerAmmo);
 
-        Inventory inventory = player.GetComponent<PlayerInventory>().Inventory;
+        Inventory inventory = player.GetComponent<PlayerBase>().PlayerInventory.Inventory;
         for (int i = 0; i < playerData.PlayerItems.Length; i++)
         {
             ItemConfig itemConfig = ItemsDatabase.Instance.GetItemConfigByID(playerData.PlayerItems[i].ID);
@@ -57,8 +57,10 @@ public class PlayerSpawner : MonoSingleton<PlayerSpawner>
         GameObject player = Instantiate(_playerPrefab);
         player.transform.position = position;
         player.transform.SetParent(SceneObjects.Instance.CharactersParent);
-        player.GetComponent<PlayerBase>().Init();
-        SceneObjects.Instance.PlayerLink = player;
+        PlayerBase playerBase = player.GetComponent<PlayerBase>();
+        playerBase.Init();
+        SceneObjects.Instance.PlayerGameObject = player;
+        SceneObjects.Instance.PlayerBase = playerBase;
 
         return player;
     }

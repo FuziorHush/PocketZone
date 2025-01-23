@@ -3,30 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class TargetMarkController : MonoBehaviour
+public class TargetMarkController : IPlayerContextUpdate
 {
-    [SerializeField] private GameObject _markPrefab;
     private GameObject _mark;
     private Transform _markTransform;
     private SpriteRenderer _markSpriteRenderer;
 
-    private PlayerEnemiesDetection _playerDetection;
+    private PlayerEnemiesDetection _playerEnemiesDetection;
 
     private Transform _currentTarget;
 
-    public void Init() 
+    public void Init(PlayerEnemiesDetection playerEnemiesDetection, GameObject targetMarkPrefab) 
     {
-        _playerDetection = GetComponent<PlayerEnemiesDetection>();
+        _playerEnemiesDetection = playerEnemiesDetection;
 
-        _mark = Instantiate(_markPrefab);
+        _mark = GameObject.Instantiate(targetMarkPrefab);
         _markSpriteRenderer = _mark.transform.GetChild(0).GetComponent<SpriteRenderer>();
         _markSpriteRenderer.color = Color.clear;
         _markTransform = _mark.transform;
     }
 
-    private void Update()
+    public void OnUpdate()
     {
-        if (_playerDetection.TargetEnemy == null)
+        if (_playerEnemiesDetection.TargetEnemy == null)
         {
             if (_mark.activeInHierarchy)
             {
@@ -34,15 +33,15 @@ public class TargetMarkController : MonoBehaviour
                 _mark.SetActive(false);
             }
         }
-        else if (_currentTarget != _playerDetection.TargetEnemy)
+        else if (_currentTarget != _playerEnemiesDetection.TargetEnemy)
         {
-            _markTransform.position = _playerDetection.TargetEnemy.position;
-            _currentTarget = _playerDetection.TargetEnemy;
+            _markTransform.position = _playerEnemiesDetection.TargetEnemy.position;
+            _currentTarget = _playerEnemiesDetection.TargetEnemy;
             PlaySetMarkAnimation();
         }
-        else 
+        else
         {
-            _markTransform.position = _playerDetection.TargetEnemy.position;
+            _markTransform.position = _playerEnemiesDetection.TargetEnemy.position;
         }
     }
 

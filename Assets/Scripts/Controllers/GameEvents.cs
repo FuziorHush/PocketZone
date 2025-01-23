@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public static class GameEvents
+public static class GameEvents //make custom event system if the game gets bigger
 {
     public static UnityAction PlayerDied;
     public static UnityAction<GameObject> EnemyDied;

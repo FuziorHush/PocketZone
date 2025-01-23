@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace Enemies
 {
-    public class EnemyStateIdle : MonoBehaviour, IEnemyState
+    public class EnemyStateIdle : IEnemyState
     {
         private EnemyBase _enemyBase;
+        private Transform _transform;
 
         private float _agrRadius;
 
@@ -14,6 +15,7 @@ namespace Enemies
         {
             _enemyBase = enemyBase;
             _agrRadius = config.AgrRadiusIdle;
+            _transform = enemyBase.transform;
         }
 
         public void OnActivate()
@@ -23,7 +25,7 @@ namespace Enemies
 
         public void OnUpdate()
         {
-            if (Vector3.Distance(transform.position, _enemyBase.PlayerTransform.position) < _agrRadius)
+            if (Vector3.Distance(_transform.position, _enemyBase.PlayerTransform.position) < _agrRadius)
             {
                 _enemyBase.SetState(EnemyState.Attack);
             }

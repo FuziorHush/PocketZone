@@ -856,8 +856,6 @@ GameObject:
   - component: {fileID: 7661620589836464643}
   - component: {fileID: 7661620589836464640}
   - component: {fileID: 7661620589836464644}
-  - component: {fileID: 7661620589836464645}
-  - component: {fileID: 7661620589836464642}
   - component: {fileID: 7661620589836464646}
   - component: {fileID: 7661620589836464647}
   - component: {fileID: 7661620589836464649}
@@ -912,30 +910,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 2f67eccee08b14c4db42abd49e28578b, type: 2}
---- !u!114 &7661620589836464645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7661620589836464641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39cb0630b9268954cabdef5562d40ea5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7661620589836464642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7661620589836464641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdec6c080ed9f2d47b457c7e324290ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!195 &7661620589836464646
 NavMeshAgent:
   m_ObjectHideFlags: 0

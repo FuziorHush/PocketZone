@@ -3,20 +3,20 @@ using GameSave;
 
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private GameFlowController _gameFlow;
-    [SerializeField] private ItemsDatabase _itemsDatabase;
-    [SerializeField] private PoolsController _poolsController;
-    [SerializeField] private PlayerSpawner _playerSpawner;
-    [SerializeField] private EnemiesSpawner _enemiesSpawner;
-    [SerializeField] private ItemsDropSystem _itemsDropSystem;
-    [SerializeField] private GameSaveController _gameSaveController;
+    [SerializeField] private GameFlowController _gameFlow; //restarting game
+    [SerializeField] private ItemsDatabase _itemsDatabase; //db for items. configs taken from Resources
+    [SerializeField] private PoolsController _poolsController; //inits GO pools and gives links to them
+    [SerializeField] private PlayerSpawner _playerSpawner; //spawns player, camera
+    [SerializeField] private EnemiesSpawner _enemiesSpawner; //spawns random enemies on random points
+    [SerializeField] private ItemsDropSystem _itemsDropSystem; //spawwns items on top of dead enemies
+    [SerializeField] private GameSaveController _gameSaveController; //loads and saves data
     [SerializeField] private HUD _hud;
 
     public static bool LoadSaveOnStart;
 
     static Bootstrap()
     {
-        LoadSaveOnStart = true;
+        LoadSaveOnStart = true; //gameflow can set it false to start new game if save file exists
     }
 
     private void Start()

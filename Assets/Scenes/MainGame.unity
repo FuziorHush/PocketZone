@@ -14211,7 +14211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0be8e6c6c48f2642aa7f6b8ac06abef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerLink: {fileID: 0}
+  PlayerGameObject: {fileID: 0}
+  PlayerBase: {fileID: 0}
   PlayerSpawnPoint: {fileID: 866853252}
   EnemiesSpawnPoints:
   - {fileID: 2075564531}

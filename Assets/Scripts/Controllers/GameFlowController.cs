@@ -19,6 +19,12 @@ public class GameFlowController : MonoSingleton<GameFlowController>
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
+    public void RestartWithoutLoadig()
+    {
+        Bootstrap.LoadSaveOnStart = false;
+        Restart();
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();

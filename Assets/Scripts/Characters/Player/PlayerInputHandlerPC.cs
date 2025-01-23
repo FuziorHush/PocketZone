@@ -8,7 +8,7 @@ public class PlayerInputHandlerPC : IPlayerInputHandler
 
     public void Init(GameObject player)
     {
-        _playerInventory = player.GetComponent<PlayerInventory>();
+        _playerInventory = player.GetComponent<PlayerBase>().PlayerInventory;
     }
 
     public void DeleteItem(int id)

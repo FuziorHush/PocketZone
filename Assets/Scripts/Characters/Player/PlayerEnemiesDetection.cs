@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEnemiesDetection : MonoBehaviour
+public class PlayerEnemiesDetection : IPlayerContextUpdate
 {
-    [SerializeField] private LayerMask _circleCastLM;
-    [SerializeField] private LayerMask _overlapCircleLM;
-    [SerializeField] private Transform _shootPoint;
-
+    private LayerMask _circleCastLM;
+    private LayerMask _overlapCircleLM;
+    private Transform _shootPoint;
     private int _enemyLayer;
 
     private float _detectionRadius;
@@ -15,13 +14,16 @@ public class PlayerEnemiesDetection : MonoBehaviour
 
     public Transform TargetEnemy { get; private set; }
 
-    public void Init(PlayerConfig config) 
+    public void Init(PlayerConfig config, LayerMask circleCastLM, LayerMask overlapCircleLM, Transform shootPoint) 
     {
         _enemyLayer = LayerMask.NameToLayer("Enemies");
+        _circleCastLM = circleCastLM;
+        _overlapCircleLM = overlapCircleLM;
+        _shootPoint = shootPoint;
         _detectionRadius = config.EnemyDetectionRadius;
     }
 
-    private void Update()
+    public void OnUpdate() 
     {
         Collider2D[] enemies = Physics2D.OverlapCircleAll(_shootPoint.position, _detectionRadius, _overlapCircleLM);
         if (enemies.Length > 0)
@@ -33,7 +35,7 @@ public class PlayerEnemiesDetection : MonoBehaviour
             else
                 TargetEnemy = closest.transform;
         }
-        else 
+        else
         {
             TargetEnemy = null;
         }

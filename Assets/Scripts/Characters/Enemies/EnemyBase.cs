@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Enemies
 {
-    public class EnemyBase : MonoBehaviour
+    public class EnemyBase : MonoBehaviour //make derived class for new enemy behavior
     {
         [SerializeField] private EnemyConfig _config;
         public EnemyConfig Config => _config;
@@ -23,11 +23,11 @@ namespace Enemies
             _healthConponent = GetComponent<Health>();
             NavMeshAgent = GetComponent<NavMeshAgent>();
 
-            EnemyStateIdle enemyStateIdle = GetComponent<EnemyStateIdle>();
+            EnemyStateIdle enemyStateIdle = new EnemyStateIdle();
             enemyStateIdle.Init(this, _config);
             _states.Add(EnemyState.Idle, enemyStateIdle);
 
-            EnemyStateAttack enemyStateAttack = GetComponent<EnemyStateAttack>();
+            EnemyStateAttack enemyStateAttack = new EnemyStateAttack();
             enemyStateAttack.Init(this, _config);
             _states.Add(EnemyState.Attack, enemyStateAttack);
 
@@ -37,7 +37,7 @@ namespace Enemies
             NavMeshAgent.speed = _config.MoveSpeed;
             NavMeshAgent.stoppingDistance = _config.DamageRadius;
 
-            PlayerTransform = SceneObjects.Instance.PlayerLink.transform;
+            PlayerTransform = SceneObjects.Instance.PlayerGameObject.transform;
 
             _currentState = _states[0];
             _currentState.OnActivate();

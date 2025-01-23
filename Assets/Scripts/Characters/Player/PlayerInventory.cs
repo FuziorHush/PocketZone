@@ -2,26 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInventory : MonoBehaviour
+public class PlayerInventory : IPlayerContextUpdate
 {
     public Inventory Inventory { get; private set; }
 
-    [SerializeField] private LayerMask _itemsLM;
-
+    private Transform _transform;
+    private LayerMask _itemsLM;
     private float _pickupRadius;
-
     private PlayerShooting _playerShooting;
 
-    public void Init(PlayerConfig config) 
+    public void Init(PlayerConfig config, Transform transform, PlayerShooting playerShooting, LayerMask itemsLM) 
     {
-        _playerShooting = GetComponent<PlayerShooting>();
+        _transform = transform;
+        _playerShooting = playerShooting;
+        _itemsLM = itemsLM;
         Inventory = new Inventory(config.InventoryCapacity);
         _pickupRadius = config.ItemsPickupRadius;
     }
 
-    private void Update()
+    public void OnUpdate() 
     {
-        Collider2D[] items = Physics2D.OverlapCircleAll(transform.position, _pickupRadius, _itemsLM);
+        Collider2D[] items = Physics2D.OverlapCircleAll(_transform.position, _pickupRadius, _itemsLM);
         for (int i = 0; i < items.Length; i++)
         {
             PickupItem(items[i].gameObject);
@@ -36,7 +37,7 @@ public class PlayerInventory : MonoBehaviour
         {
             if (Inventory.PutItem(item, inventoryItem.Amount))
             {
-                Destroy(groundObject);
+                GameObject.Destroy(groundObject);
                 GameEvents.ItemPickedUp?.Invoke(inventoryItem);
                 GameEvents.PlayerInventoryUpdated?.Invoke(Inventory);
                 return true;
@@ -48,7 +49,7 @@ public class PlayerInventory : MonoBehaviour
             {
                 case "ammo":
                     _playerShooting.AddAmmo(inventoryItem.Amount);
-                    Destroy(groundObject);
+                    GameObject.Destroy(groundObject);
                     GameEvents.ItemPickedUp?.Invoke(inventoryItem);
                     return true;
             }
